@@ -161,7 +161,7 @@ You can also use `upgrade = 'never'` in the command itself, e.g.
 devtools::install_github("mark-andrews/bada02", subdir = "priorexposure", upgrade = 'never')
 ```
 
-## Trouble getting `rstan` and `brms` working on Windows using R 4.0 (and higher)?
+## Trouble getting `rstan` and `brms` working on Windows using R 4.0 (but < R.2)?
 
 Here's what I did to get `rstan` and `brsm` working on Windows using R 4.0 (and higher)?
 
@@ -192,4 +192,49 @@ install.packages('brms')
 ```
 
 7. Test the `brms` code above, i.e. with the `M <- brm(x ~ 1, data = data_df)`.
+
+## Installing `rstan` and `brms` on Windows using R 4.2
+
+The instructions for  `rstan` and `brms` on Windows using Windows and R 4.0 holds, I think for all R 4.0x and 4.1x versions, but then things change slightly with R 4.2x.
+
+To install `rstan` and `brms` on Windows using R 4.2, things were much the same as before, but with just a few changes.
+
+1. First, in R, install `rstan`.
+```r
+install.packages("rstan")
+```
+
+2. In Windows, download and run the Rtools 4.2 installer, found [here](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html).
+
+3. Back in R, check your system (operating system) path with 
+```r
+Sys.getenv(x = 'PATH')
+```
+Do you see `rtools42`? For example, on my system, my output is 
+```
+[1] "C:\\rtools42\\x86_64-w64-mingw32.static.posix\\bin;C:\\rtools42\\usr\\bin;C:\\usr\\bin;C:\\mingw64\\bin;C:\\Program Files\\R\\R-4.2.1\\bin\\x64;C:\\Windows\\System32;C:\\Windows;C:\\Windows\\System32\\wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0; .......
+```
+As we can see, `rtools42` is on the search path. 
+
+If it were not, the following command will hopefully do the trick:
+```r
+writeLines('PATH="${RTOOLS42_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
+```
+
+4. *Restart R*
+
+5. Check that RTools is working.
+```r
+pkgbuild::has_build_tools(debug = TRUE)
+```
+This should simply return `TRUE`.
+
+6. Install `brms`.
+```r
+
+install.packages('brms')
+```
+
+
+
 
