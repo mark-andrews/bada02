@@ -5,7 +5,7 @@ These are password protected, and you will have been given this password in the 
 
 * [Session 1](https://vimeo.com/761421238)
 * [Session 2](https://vimeo.com/761485608)
-* Session 3
+* [Session 3](https://vimeo.com/761556060)
 
 # Day 2
 
