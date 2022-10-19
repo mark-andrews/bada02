@@ -9,3 +9,4 @@ mathach_df <- read_csv("https://raw.githubusercontent.com/mark-andrews/bada02/ma
 mathach_school_df <- read_csv <- read_csv("https://raw.githubusercontent.com/mark-andrews/bada02/master/data/mathachieveschool.csv")
 science_df <- read_csv('https://raw.githubusercontent.com/mark-andrews/bada02/master/data/science.csv')
 owls <- read_csv('https://raw.githubusercontent.com/mark-andrews/bada02/master/data/owls.csv')
+weight_df <- read_csv("https://raw.githubusercontent.com/mark-andrews/bada02/main/data/weight.csv")
