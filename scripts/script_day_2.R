@@ -109,3 +109,23 @@ new_priors <- c(
 M_4 <- brm(weight ~ height + age + gender, 
            data = weight_df,
            prior = new_priors)
+
+# look at coefficients
+round(fixef(M_4), 3)
+# compare with lm model
+round(summary(M_freq_2)$coefficients, 3)
+round(confint(M_freq_2), 3)
+
+summary(M_freq_2)$r.sq
+bayes_R2(M_4)
+
+# Model comparison in Bayesian models
+
+M_5 <- brm(weight ~ height, data = weight_df)
+waic_M_3 <- waic(M_3)
+waic_M_5 <- waic(M_5)
+loo_compare(waic_M_3, waic_M_5)
+
+loo_M_3 <- loo(M_3)
+loo_M_5 <- loo(M_5)
+loo_compare(loo_M_3, loo_M_5)
