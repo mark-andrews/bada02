@@ -11,7 +11,7 @@ These are password protected, and you will have been given this password in the 
 
 * [Session 1](https://vimeo.com/761825273)
 * [Session 2](https://vimeo.com/761895720)
-* Session 3
+* [Session 3](https://vimeo.com/761963361)
 
 # Day 3
 
