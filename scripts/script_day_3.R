@@ -113,3 +113,82 @@ waic_M_12 <- waic(M_12)
 loo_compare(waic_M_11, waic_M_12)
 waic_11_12 <- waic(M_11, M_12)
 -2 * waic_11_12$diffs
+
+
+# predicted mean of the the distribution for any given value of `prestige`
+prestige_df <- tibble(prestige = seq(5))
+# get mean of posterior over predicted log mean for each value of `prestige`
+posterior_linpred(M_11, newdata = prestige_df) %>% apply(2, mean)
+# get percentiles (0, 25, 50, 75, 100) for posterior over log mean for each value of `prestige`
+posterior_linpred(M_11, newdata = prestige_df) %>% apply(2, quantile)
+
+# get percentiles (0, 25, 50, 75, 100) for posterior over mean for each value of `prestige`
+posterior_linpred(M_11, newdata = prestige_df, transform = TRUE) %>% apply(2, quantile)
+
+# get 95% posterior interval of posterior over mean for each value of `prestige`
+hpd <- function(x)quantile(x, probs = c(0.025, 0.975))
+posterior_linpred(M_11, newdata = prestige_df, transform = TRUE) %>% apply(2, hpd)
+
+# And for the Negative Binomial regression  .....
+posterior_linpred(M_12, newdata = prestige_df, transform = TRUE) %>% apply(2, hpd)
+
+
+
+
+# Zeroinflated count data -------------------------------------------------
+
+cig_mean <- mean(smoking_df$cigs)
+# what is probability of zero in Poisson distribution with mean of `cig_mean`
+dpois(x = 0, lambda = cig_mean)
+
+
+# Poisson regression
+M_13 <- brm(cigs ~ educ, 
+            data = smoking_df,
+            family = poisson())
+
+# Neg binomial regression
+M_14 <- brm(cigs ~ educ, 
+            data = smoking_df,
+            family = negbinomial())
+
+
+# Zero inflated Poisson regression
+M_15 <- brm(cigs ~ educ, 
+            data = smoking_df,
+            family = zero_inflated_poisson())
+
+# Zero inflated Neg binomial regression
+M_16 <- brm(cigs ~ educ, 
+            data = smoking_df,
+            family = zero_inflated_negbinomial())
+
+
+# Zero inflated Poisson regression ++ 
+M_17 <- brm(bf(cigs ~ educ, zi ~ educ),
+            data = smoking_df,
+            family = zero_inflated_poisson())
+
+# Zero inflated Neg binomial regression ++ 
+M_18 <- brm(bf(cigs ~ educ, zi ~ educ), 
+            data = smoking_df,
+            family = zero_inflated_negbinomial())
+
+zi_waic <- waic(M_13, M_14, M_15, M_16, M_17, M_18)
+-2 * zi_waic$diffs
+
+
+# Mixed effects models -----------------------------------------------------
+library(lme4)
+ggplot(sleepstudy,
+       aes(x = Days, y = Reaction, colour = Subject)
+) + geom_point() + 
+  stat_smooth(method = 'lm', se = F) +
+  facet_wrap(~Subject)
+
+# frequentist linear mixed effects model
+M_freq_7 <- lmer(Reaction ~ Days + (Days|Subject), data = sleepstudy)
+summary(M_freq_7)
+
+# frequentist linear mixed effects model
+M_19 <- brm(Reaction ~ Days + (Days|Subject), data = sleepstudy)
